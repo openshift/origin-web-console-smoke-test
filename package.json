@@ -1,0 +1,14 @@
+{
+  "name": "origin-web-console-smoke-test-nodejs",
+  "version": "0.0.1",
+  "description": "POC smoke tests to run in a pod and target origin web console",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+
+  },
+  "scripts": {
+    
+  }
+}
