@@ -1,5 +1,7 @@
 node_modules
+test_reports
 npm-debug.log
+yarn.lock
 .tmp
 .sass-cache
 .bundle
