@@ -1,11 +1,12 @@
 'use strict';
 
-let isMac = /^darwin/.test(process.platform);
-let SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-let HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
-let jasmineReporters = require('jasmine-reporters');
+const isMac = /^darwin/.test(process.platform);
+const isDocker = require('is-docker')();
+const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
+const jasmineReporters = require('jasmine-reporters');
 
-let screenshotReporter = new HtmlScreenshotReporter({
+const screenshotReporter = new HtmlScreenshotReporter({
   cleanDestination: isMac ? true : false,
   dest: './test/tmp/screenshots',
   filename: 'protractor-e2e-report.html',
@@ -15,7 +16,7 @@ let screenshotReporter = new HtmlScreenshotReporter({
   }
 });
 
-let junitReporter = new jasmineReporters.JUnitXmlReporter({
+const junitReporter = new jasmineReporters.JUnitXmlReporter({
    consolidateAll: true,
    savePath: 'test/junit',
    filePrefix: 'e2e-results'
@@ -27,7 +28,13 @@ exports.config = {
   directConnect: true,
 
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'chromeOptions': {
+      // We must disable the Chrome sandbox when running Chrome inside Docker
+      // (Chrome's sandbox needs more permissions than Docker allows by default)
+      // flags: isDocker ? ['--no-sandbox'] : []
+      args: isDocker ? ["--no-sandbox", "--headless", "--disable-gpu", "--window-size=1200x800"] : []
+    }
   },
 
   specs: ['test/spec/**/*.spec.js'],

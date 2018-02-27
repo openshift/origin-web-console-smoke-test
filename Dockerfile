@@ -3,7 +3,13 @@
 #
 # https://hub.docker.com/r/selenium/standalone-chrome/
 # FROM selenium/standalone-firefox:latest
-FROM nodejs:latest
+FROM node:latest
+
+# Install Google Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+RUN apt-get update && apt-get install -y google-chrome-stable
+
 
 # handle app dependencies as a separate layer
 # this already defines selenium-standalone as a dependency
@@ -19,6 +25,8 @@ WORKDIR /opt/origin-smoke-test
 
 ADD . /opt/origin-smoke-test
 
+# not sure we need this, actually.
 EXPOSE 3000
 
+# TODO: gotta pipe the CONSOLE_PUBLIC_URL environment var to this
 CMD ["yarn", "test:run_once"]
