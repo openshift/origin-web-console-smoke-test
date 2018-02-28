@@ -6,6 +6,7 @@
   "repository": {},
   "license": "MIT",
   "dependencies": {
+    "eslint": "^4.18.1",
     "is-docker": "^1.1.0",
     "jasmine-reporters": "^2.3.0",
     "jasmine-spec-reporter": "^4.2.1",
@@ -19,6 +20,8 @@
     "webdriver:status": "$(npm bin)/webdriver-manager status",
     "webdriver:clean": "$(npm bin)/webdriver-manager clean",
     "test:run_once": "yarn run webdriver:update && yarn run protractor",
-    "test": "yarn run protractor"
+    "test": "yarn run protractor",
+    "lint": "$(npm bin)/eslint test/**/*",
+    "lint:init": "$(npm bin)/eslint --init"
   }
 }

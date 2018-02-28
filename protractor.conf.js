@@ -1,27 +1,28 @@
 'use strict';
 
 const isMac = /^darwin/.test(process.platform);
-const isDocker = require('is-docker')();
-const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+let isDocker = require('is-docker')();
+const { SpecReporter } = require('jasmine-spec-reporter');
 const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
 const jasmineReporters = require('jasmine-reporters');
 
+const output = './test_reports';
+
 const screenshotReporter = new HtmlScreenshotReporter({
   cleanDestination: isMac ? true : false,
-  dest: './test/tmp/screenshots',
+  dest: `${output}/screenshots`,
   filename: 'protractor-e2e-report.html',
   takeScreenShotsOnlyForFailedSpecs: true,
   pathBuilder: function(currentSpec, suites, browserCapabilities) {
-   return browserCapabilities.get('browserName') + '/' + currentSpec.fullName;
+    return browserCapabilities.get('browserName') + '/' + currentSpec.fullName;
   }
 });
 
 const junitReporter = new jasmineReporters.JUnitXmlReporter({
-   consolidateAll: true,
-   savePath: 'test/junit',
-   filePrefix: 'e2e-results'
+  consolidateAll: true,
+  savePath: `${output}/junint`,
+  filePrefix: 'e2e-results'
 });
-
 
 exports.config = {
   // skip webdriver manager, selenium, etc
@@ -33,12 +34,19 @@ exports.config = {
       // We must disable the Chrome sandbox when running Chrome inside Docker
       // (Chrome's sandbox needs more permissions than Docker allows by default)
       // flags: isDocker ? ['--no-sandbox'] : []
-      args: isDocker ? ["--no-sandbox", "--headless", "--disable-gpu", "--window-size=1200x800"] : []
+      args: isDocker ? [
+        '-no-sandbox',
+        '--headless',
+        '--disable-gpu',
+        '--allow-insecure-localhost',
+        // '--window-size=1200x800'
+        '--window-size=1600x600'
+      ] : []
     }
   },
 
   specs: ['test/spec/**/*.spec.js'],
-
+  framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
@@ -62,8 +70,5 @@ exports.config = {
     }));
 
     jasmine.getEnv().addReporter(junitReporter);
-
-
-  },
-
+  }
 };

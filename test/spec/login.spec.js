@@ -1,6 +1,6 @@
-const env = require('../helpers/environment');
+const env = require('../environment');
 const Login = require('../pageobjects/login');
-
+const timing = require('../helpers/timing');
 
 beforeEach(() => {
   // TODO: just set in conf onPrepare() ?
@@ -14,14 +14,11 @@ describe('Openshift login page', () => {
       // if we don't have a token we should automatically redirect to the login page.
       //browser.get(env.consoleUrl);
       const loginPage = new Login();
-      const user = {
-        name: 'e2e-user',
-        pass: 'e2e-user'
-      };
+      const user = env.user;
       loginPage.visit();
+      browser.driver.sleep(timing.oauthRedirect);
       loginPage.login(user.name, user.pass);
       // arbitrary sleep... should remove, flaky tests!
-      browser.driver.sleep(1000);
       const catalogHeading = element(by.css('h1'));
       expect(catalogHeading.getText()).toBe('Browse Catalog');
     });

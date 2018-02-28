@@ -1,0 +1,37 @@
+env:
+  es6: true
+  node: true
+extends: 'eslint:recommended'
+globals:
+  beforeEach: true
+  browser: true
+  by: true
+  console: true
+  describe: true
+  element: true
+  expect: true
+  it: true
+  jasmine: true
+rules:
+  comma-style:
+    - error
+    - last
+  eqeqeq: error
+  no-continue: error
+  # console is fine in node.js
+  no-console: off
+  indent:
+    - error
+    - 2
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - always
+  # use strict @ the top
+  strict: 0
+  yoda: error

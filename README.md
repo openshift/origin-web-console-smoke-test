@@ -13,6 +13,19 @@ yarn run test
 yarn run test:run_once
 ```
 
+## Running locally
+
+```bash
+# cluster up with the public IP of your machine:
+oc cluster up --version=latest --service-catalog --public-hostname=<your-machine-ip>
+oc cluster up --version=latest --service-catalog --public-hostname=192.168.1.69
+# set the env vars, unless the default https://127.0.0.1:8443 is sufficient
+CONSOLE_PUBLIC_URL="https://192.168.1.69:8443" \
+  CONSOLE_USER_NAME=bob \
+  CONSOLE_PASSWORD=bob \
+  yarn run test
+```
+
 ## Docker container communication
 
 You can build the container locally, but running it vanilla docker wont work.
@@ -29,8 +42,9 @@ docker build -t origin-web-console-smoke-test .
 Running the container locally via docker (tests will fail!)
 
 ```bash
-# be sure you have oc cluster-up!
-# get the origin-web-console container IP
+# if you are using `oc cluster up`:
+oc cluster up --version=latest --service-catalog \
+  --public-hostname=$(dig +short myip.opendns.com @resolver1.opendns.com)
 # docker ps
 # find the origin-web-console container ID
 # docker inspect <console-id>
@@ -40,6 +54,9 @@ docker run -it --rm \
   # you will need the IP address of the console for this.
   # if its local, an IP for your machine
   # if its remote, the IP or domain of the console for the cluster
+  # use a command like:
+  #   dig +short myip.opendns.com @resolver1.opendns.com
+  # to get your machine
   -e CONSOLE_PUBLIC_URL=https://foo.bar.baz
 ```
 

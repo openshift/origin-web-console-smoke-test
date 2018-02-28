@@ -11,7 +11,7 @@ module.exports = {
   // implicit redirects do not cause browser.refresh()
   implicitRedirect: 500,
   // oauth jumps around & causes everything to reload
-  oauthRedirect: 3 * 1000,
+  oauthRedirect: 2 * 1000,
   // sufficient for menus.someNav.clickSomething()
   navToPage: 500,
   // sufficient for a show/hide delay for a UI element.
