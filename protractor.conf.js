@@ -41,7 +41,15 @@ exports.config = {
         '--allow-insecure-localhost',
         // '--window-size=1200x800'
         '--window-size=1600x600'
-      ] : []
+      ] : [
+        // MacOS & normal envs should not use these flags, but here for debugging
+        // '-no-sandbox',
+        // '--headless',
+        // '--disable-gpu',
+        // '--allow-insecure-localhost',
+        // // '--window-size=1200x800'
+        // '--window-size=1600x600'
+      ]
     }
   },
 

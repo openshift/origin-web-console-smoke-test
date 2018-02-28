@@ -7,3 +7,5 @@ npm-debug.log
 .idea
 bower_components
 .DS_Store
+.yarn_cache/*
+!.yarn_cache/.gitkeep
