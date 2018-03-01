@@ -6,9 +6,9 @@
   "repository": {},
   "license": "MIT",
   "dependencies": {
-
+    "eslint": "^4.18.1"
   },
   "scripts": {
-    
+    "lint": "$(yarn bin)/eslint test/**/*"
   }
 }
