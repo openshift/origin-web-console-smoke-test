@@ -26,13 +26,19 @@ RUN cd /tmp/dependencies && yarn install && \
     mkdir -p /opt/origin-smoke-test && \
     cp -a /tmp/dependencies/node_modules /opt/origin-smoke-test
 
-WORKDIR /opt/origin-smoke-test
-
 # now, install our app as a separate layer
 ADD . /opt/origin-smoke-test
+
+# set user so webdriver can do install things
+RUN useradd -ms /bin/bash smoke-tester && \
+    chmod -R 755 /opt/origin-smoke-test && \
+    chown -R smoke-tester:smoke-tester /opt/origin-smoke-test
+
+USER smoke-tester
+ENV HOME /opt/origin-smoke-test
+WORKDIR /opt/origin-smoke-test
 
 # not sure we need this, actually.
 EXPOSE 3000
 
-# TODO: gotta pipe the CONSOLE_PUBLIC_URL environment var to this
 CMD ["/opt/origin-smoke-test/run.sh"]
