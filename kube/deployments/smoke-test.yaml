@@ -19,7 +19,7 @@ spec:
       containers:
       - name: origin-web-console-smoke-test
         # see if we find it on dockerhub
-        image: benjaminapetersen/origin-web-console-smoke-test
+        image: benjaminapetersen/origin-web-console-smoke-test:v0.0.8
         imagePullPolicy: IfNotPresent
         # i think the env vars will work here...
         env:

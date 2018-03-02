@@ -22,7 +22,7 @@ os::log::info "Give Xvfb time to start"
 sleep 3
 
 os::log::info "Update webdriver-manager"
-$(yarn bin)/webdriver-manager update
+#$(yarn bin)/webdriver-manager update
 
 os::log::info "Run Protractor tests"
 # doesn't seem to pass along the env vars otherwise
@@ -31,7 +31,7 @@ os::log::info "Run Protractor tests"
 $(CONSOLE_URL="${CONSOLE_URL}" \
   CONSOLE_USER=${CONSOLE_USER} \
   CONSOLE_PASSWORD=${CONSOLE_PASSWORD} \
-  ./node_modules/protractor/bin/protractor protractor.conf.js)
+  /opt/origin-smoke-test/node_modules/protractor/bin/protractor protractor.conf.js)
   # $(yarn bin)/protractor protractor.conf.js)
 
 os::log::info "Test Complete, exit code: $?"

@@ -34,8 +34,10 @@ RUN useradd -ms /bin/bash smoke-tester && \
     chmod -R 755 /opt/origin-smoke-test && \
     chown -R smoke-tester:smoke-tester /opt/origin-smoke-test
 
+RUN /opt/origin-smoke-test/node_modules/protractor/bin/webdriver-manager update
+
 USER smoke-tester
-ENV HOME /opt/origin-smoke-test
+#ENV HOME /opt/origin-smoke-test
 WORKDIR /opt/origin-smoke-test
 
 # not sure we need this, actually.
