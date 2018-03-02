@@ -9,31 +9,29 @@
 FROM node:latest
 
 # Install firefox
-RUN apt-get update && \
-    apt-get install -y firefox
-    # will firefox need xvfb to run headless?
-    # apt-get install xvfb 
+# firefox erm, firefox is called iceweasel? fo'realz?
+RUN apt-get update
+RUN apt-get -qqy --no-install-recommends install \
+    xvfb \
+    iceweasel
 
 # handle app dependencies as a separate layer
 # this already defines selenium-standalone as a dependency
 # so we shouldn't need to install selenium, java, etc.
 ADD package.json /tmp/dependencies/package.json
 
-RUN cd /tmp/dependencies && yarn install
-
-RUN mkdir -p /opt/origin-smoke-test \
-    && cp -a /tmp/dependencies/node_modules /opt/origin-smoke-test
+# install deps in tmp
+# then move them to final location
+RUN cd /tmp/dependencies && yarn install && \
+    mkdir -p /opt/origin-smoke-test && \
+    cp -a /tmp/dependencies/node_modules /opt/origin-smoke-test
 
 WORKDIR /opt/origin-smoke-test
 
-# add the rest of the app here, ignoring whats in the .dockerignore
-# so that our node_modules folder doesn't overwrite the above install,
-# which keeps our actual app on a separate layer than the dependencies,
-# to improve caching.
+# now, install our app as a separate layer
 ADD . /opt/origin-smoke-test
 
 # not sure we need this, actually.
-# EXPOSE 3000
+EXPOSE 3000
 
-# TODO: gotta pipe the CONSOLE_PUBLIC_URL environment var to this
-CMD ["yarn", "test:run_once"]
+CMD ["/opt/origin-smoke-test/run.sh"]

@@ -21,7 +21,9 @@
     "webdriver:clean": "$(yarn bin)/webdriver-manager clean",
     "test:run_once": "yarn run webdriver:update && yarn run protractor",
     "test": "yarn run protractor",
+    "test:clean": "rm -r ./test_reports",
     "lint": "$(yarn bin)/eslint test/**/*",
-    "lint:init": "$(yarn bin)/eslint --init"
+    "lint:init": "$(yarn bin)/eslint --init",
+    "test:with_xvfb": "run.sh"
   }
 }

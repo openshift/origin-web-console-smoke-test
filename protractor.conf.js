@@ -29,28 +29,12 @@ exports.config = {
   directConnect: true,
 
   capabilities: {
-    'browserName': 'chrome',
-    'chromeOptions': {
-      // We must disable the Chrome sandbox when running Chrome inside Docker
-      // (Chrome's sandbox needs more permissions than Docker allows by default)
-      // flags: isDocker ? ['--no-sandbox'] : []
-      args: isDocker ? [
-        '-no-sandbox',
-        '--headless',
-        '--disable-gpu',
-        '--allow-insecure-localhost',
-        // '--window-size=1200x800'
-        '--window-size=1600x600'
-      ] : [
-        // MacOS & normal envs should not use these flags, but here for debugging
-        // '-no-sandbox',
-        // '--headless',
-        // '--disable-gpu',
-        // '--allow-insecure-localhost',
-        // // '--window-size=1200x800'
-        // '--window-size=1600x600'
-      ]
-    }
+    'browserName': 'firefox',
+    'marionnette': true,
+    acceptInsecureCerts : true
+    // 'moz:firefoxOptions': {
+    //   args: [ '-headless' ]
+    // }
   },
 
   specs: ['test/spec/**/*.spec.js'],

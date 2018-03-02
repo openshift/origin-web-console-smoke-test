@@ -22,9 +22,9 @@ spec:
         image: benjaminapetersen/origin-web-console-smoke-test
         # i think the env vars will work here...
         env:
-        - name: CONSOLE_PUBLIC_URL
-          value: https://192.168.1.69:8443
-        - name: CONSOLE_USER_NAME
+        - name: CONSOLE_URL
+          value: https://10.192.213.145:8443
+        - name: CONSOLE_USER
           value: bob
         - name: CONSOLE_PASSWORD
           value: bob

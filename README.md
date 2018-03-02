@@ -48,8 +48,8 @@ You should be able to run the code locally like this:
 
 ```bash
 # set the env vars, unless the default https://127.0.0.1:8443 is sufficient
-CONSOLE_PUBLIC_URL="https://192.168.1.69:8443" \
-  CONSOLE_USER_NAME=bob \
+CONSOLE_URL="https://192.168.1.69:8443" \
+  CONSOLE_USER=bob \
   CONSOLE_PASSWORD=bob \
   yarn run test
 ```
@@ -97,5 +97,5 @@ docker run -it --rm \
   # use a command like:
   #   dig +short myip.opendns.com @resolver1.opendns.com
   # to get your machine
-  -e CONSOLE_PUBLIC_URL=https://foo.bar.baz
+  -e CONSOLE_URL=https://foo.bar.baz
 ```

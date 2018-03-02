@@ -2,28 +2,29 @@
 
 set -e
 
-#source "$(dirname "${BASH_SOURCE}")/hack/lib/init.sh"
+source "$(dirname "${BASH_SOURCE}")/hack/lib/init.sh"
 
-#os::log::info "Origin Web Console Smoke Test"
-echo "Origin Web Console Smoke Test"
+os::log::info "Origin Web Console Smoke Test"
 
-COUNTER=1
+if [ -z "$CONSOLE_URL" ]; then
+  os::log::info "The environment variable CONSOLE_URL must be set."
+  exit 1
+else
+  os::log::info "The CONSOLE_URL is to $CONSOLE_URL"
+fi
 
-while true
-do
-  # os::log::info  "Running Test: $COUNTER"
-  echo "Running Test: $COUNTER"
-  # $($(npm bin)/webdriver-manager update)
-  ./node_modules/.bin/webdriver-manager update
+os::log::info "init Xvfb and run it in the background"
 
-  $(CONSOLE_PUBLIC_URL="https://192.168.1.69:8443" \
-    CONSOLE_USER_NAME=bob \
-    CONSOLE_PASSWORD=bob \
-    yarn run webdriver:update \
-    ./node_modules/.bin/protractor protractor.conf.js)
+export DISPLAY=:99
+Xvfb :99 -shmem -screen 0 1366x768x16 &
 
-  # os::log::info  "Test Complete, exit code:" $?
-  echo "Test Complete, exit code: ?"
-  COUNTER=$[$COUNTER +1]
-  sleep 25
-done
+os::log::info "Give Xvfb time to start"
+sleep 5
+
+os::log::info "Update webdriver-manager"
+$(yarn bin)/webdriver-manager update
+
+os::log::info "Run Protractor tests"
+$(yarn bin)/protractor protractor.conf.js
+
+os::log::info "Test Complete, exit code: $?"
