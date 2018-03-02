@@ -34,4 +34,5 @@ ADD . /opt/origin-smoke-test
 # not sure we need this, actually.
 EXPOSE 3000
 
+# TODO: gotta pipe the CONSOLE_PUBLIC_URL environment var to this
 CMD ["/opt/origin-smoke-test/run.sh"]

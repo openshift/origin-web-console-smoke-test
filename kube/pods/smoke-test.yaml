@@ -8,6 +8,7 @@ spec:
   containers:
   - name: origin-web-console-smoke-test
     image: benjaminapetersen/origin-web-console-smoke-test
+    imagePullPolicy: IfNotPresent
     env:
     - name: CONSOLE_URL
       value: https://10.192.213.145:8443
