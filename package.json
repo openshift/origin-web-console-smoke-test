@@ -15,13 +15,13 @@
     "webdriver-manager": "^12.0.6"
   },
   "scripts": {
-    "protractor": "$(npm bin)/protractor protractor.conf.js",
-    "webdriver:update": "$(npm bin)/webdriver-manager update",
-    "webdriver:status": "$(npm bin)/webdriver-manager status",
-    "webdriver:clean": "$(npm bin)/webdriver-manager clean",
+    "protractor": "$(yarn bin)/protractor protractor.conf.js",
+    "webdriver:update": "$(yarn bin)/webdriver-manager update",
+    "webdriver:status": "$(yarn bin)/webdriver-manager status",
+    "webdriver:clean": "$(yarn bin)/webdriver-manager clean",
     "test:run_once": "yarn run webdriver:update && yarn run protractor",
     "test": "yarn run protractor",
-    "lint": "$(npm bin)/eslint test/**/*",
-    "lint:init": "$(npm bin)/eslint --init"
+    "lint": "$(yarn bin)/eslint test/**/*",
+    "lint:init": "$(yarn bin)/eslint --init"
   }
 }
