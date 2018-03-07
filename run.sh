@@ -27,11 +27,9 @@ os::log::info "Update webdriver-manager"
 os::log::info "Run Protractor tests"
 # doesn't seem to pass along the env vars otherwise
 # $(yarn bin)/protractor protractor.conf.js
-# is this n00b?
-$(CONSOLE_URL="${CONSOLE_URL}" \
-  CONSOLE_USER=${CONSOLE_USER} \
-  CONSOLE_PASSWORD=${CONSOLE_PASSWORD} \
-  /opt/origin-smoke-test/node_modules/protractor/bin/protractor protractor.conf.js)
-  # $(yarn bin)/protractor protractor.conf.js)
+# TODO: this is hacky, we don't want to reference from the path set in the Dockerfile
+/opt/origin-smoke-test/node_modules/.bin/protractor --troubleshoot protractor.conf.js
+# /opt/origin-smoke-test/node_modules/protractor/bin/protractor --troubleshoot protractor.conf.js)
+# $(yarn bin)/protractor protractor.conf.js)
 
 os::log::info "Test Complete, exit code: $?"

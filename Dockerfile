@@ -10,8 +10,8 @@ FROM node:latest
 
 # Install firefox
 # firefox erm, firefox is called iceweasel? fo'realz?
-RUN apt-get update
-RUN apt-get -qqy --no-install-recommends install \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y -q \
     xvfb \
     iceweasel
 
@@ -32,9 +32,8 @@ ADD . /opt/origin-smoke-test
 # set user so webdriver can do install things
 RUN useradd -ms /bin/bash smoke-tester && \
     chmod -R 755 /opt/origin-smoke-test && \
-    chown -R smoke-tester:smoke-tester /opt/origin-smoke-test
-
-RUN /opt/origin-smoke-test/node_modules/protractor/bin/webdriver-manager update
+    chown -R smoke-tester:smoke-tester /opt/origin-smoke-test && \
+    /opt/origin-smoke-test/node_modules/protractor/bin/webdriver-manager update
 
 USER smoke-tester
 #ENV HOME /opt/origin-smoke-test
@@ -43,4 +42,4 @@ WORKDIR /opt/origin-smoke-test
 # not sure we need this, actually.
 EXPOSE 3000
 
-CMD ["/opt/origin-smoke-test/run.sh"]
+CMD /opt/origin-smoke-test/run.sh
