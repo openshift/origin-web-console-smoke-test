@@ -6,9 +6,15 @@
   "repository": {},
   "license": "MIT",
   "dependencies": {
-    "eslint": "^4.18.1"
+    "chromedriver": "^2.36.0",
+    "eslint": "^4.18.1",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "webdriverio": "^4.12.0"
   },
   "scripts": {
-    "lint": "$(yarn bin)/eslint test/**/*"
+    "lint": "$(yarn bin)/eslint test/**/*",
+    "build": "./docker_build.sh",
+    "run": "./docker_run.sh",
+    "start": "echo Hello world. from yarn run start."
   }
 }
