@@ -13,11 +13,16 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /src/*.deb
 
-RUN mkdir -p /opt/origin-smoke-test
+# install deps as a separate layer
+COPY package.json /tmp/
+
+RUN cd /tmp/ && yarn install && \
+    mkdir -p /opt/origin-smoke-test && \
+    cp -a /tmp/node_modules /opt/origin-smoke-test
 
 # risky, dont copy everything. esp with all these branches...
 # COPY . /opt/origin-smoke-test
-COPY run.sh /opt/origin-smoke-test
+COPY run.sh selenium.webdriver.js webdriver.io.js /opt/origin-smoke-test/
 
 WORKDIR /opt/origin-smoke-test
 

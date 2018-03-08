@@ -8,6 +8,6 @@ else
 fi
 
 # try selenium w/headless chrome locally!
-./selenium.webdriver.js
+# node ./selenium.webdriver.js
 # try webdriver.io with headless chrome locally!
-./webdriver.io.js
+node ./webdriver.io.js
