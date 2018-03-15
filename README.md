@@ -18,3 +18,5 @@ Debug:
 $ docker run -it --privileged --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<your-machine-ip>:8443 --entrypoint /bin/bash protractor-smoke-test
 $ protractor protractor.conf.js
 ```
+
+Based on https://github.com/jciolek/docker-protractor-headless
