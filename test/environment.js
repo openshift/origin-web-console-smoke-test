@@ -1,6 +1,6 @@
 const
   protocol = 'https://',
-  host = '192.168.100.3',
+  host = '192.168.100.1',
   serverPort = 8443,
   // env var for public url should be complete: https://192.168.1.69:8443
   baseUrl = process.env.CONSOLE_URL || `${protocol}${host}:${serverPort}`,
