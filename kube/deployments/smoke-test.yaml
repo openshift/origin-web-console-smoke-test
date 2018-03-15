@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: origin-web-console-smoke-test-deployment
+  labels:
+    app: origin-web-console-smoke-test
+spec:
+  # replica set
+  replicas: 1
+  # selector = how the deployment finds pods to manage
+  selector:
+    matchLabels:
+      app: origin-web-console-smoke-test
+  template:
+    metadata:
+      labels:
+        app: origin-web-console-smoke-test
+    spec:
+      containers:
+      - name: origin-web-console-smoke-test
+        # see if we find it on dockerhub
+        image: benjaminapetersen/origin-web-console-smoke-test:v0.0.8
+        imagePullPolicy: IfNotPresent
+        # i think the env vars will work here...
+        env:
+        - name: CONSOLE_URL
+          value: https://10.192.213.145:8443
+        - name: CONSOLE_USER
+          value: bob
+        - name: CONSOLE_PASSWORD
+          value: bob
+        ports:
+        # not necessary
+        - containerPort: 3000

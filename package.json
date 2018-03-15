@@ -1,0 +1,29 @@
+{
+  "name": "origin-web-console-smoke-test-nodejs",
+  "version": "0.0.1",
+  "description": "POC smoke tests to run in a pod and target origin web console",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^4.18.1",
+    "is-docker": "^1.1.0",
+    "jasmine-reporters": "^2.3.0",
+    "jasmine-spec-reporter": "^4.2.1",
+    "protractor": "^5.3.0",
+    "protractor-jasmine2-screenshot-reporter": "^0.5.0",
+    "webdriver-manager": "^12.0.6"
+  },
+  "scripts": {
+    "protractor": "$(yarn bin)/protractor protractor.conf.js",
+    "webdriver:update": "$(yarn bin)/webdriver-manager update",
+    "webdriver:status": "$(yarn bin)/webdriver-manager status",
+    "webdriver:clean": "$(yarn bin)/webdriver-manager clean",
+    "test:run_once": "yarn run webdriver:update && yarn run protractor",
+    "test": "yarn run protractor",
+    "test:clean": "rm -r ./test_reports",
+    "lint": "$(yarn bin)/eslint test/**/*",
+    "lint:init": "$(yarn bin)/eslint --init",
+    "test:with_xvfb": "run.sh"
+  }
+}
