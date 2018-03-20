@@ -30,7 +30,7 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-      'args': ['no-sandbox', 'headless']
+      'args': ['no-sandbox', 'headless', 'window-size=1400,1050']
     },
     acceptInsecureCerts : true
   },
@@ -46,7 +46,8 @@ exports.config = {
     print: function() {}
   },
   onPrepare: function() {
-    // browser.driver.manage().window().setSize(800, 600);
+    // can't set the window size in headless mode
+    // browser.driver.manage().window().setSize(1280, 1024);
     // we don't want to act like we are testing
     // an angular site. lets just pretend its vanilla.
     browser.ignoreSynchronization = true;

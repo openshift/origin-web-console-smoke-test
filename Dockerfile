@@ -1,5 +1,4 @@
 FROM node:6.9.4-slim
-MAINTAINER j.ciolek@webnicer.com
 WORKDIR /tmp
 COPY webdriver-versions.js ./
 ENV CHROME_PACKAGE="google-chrome-stable_59.0.3071.115-1_amd64.deb" NODE_PATH=/usr/local/lib/node_modules:/protractor/node_modules
@@ -20,9 +19,10 @@ RUN npm install -g protractor@4.0.14 minimist@1.2.0 && \
 COPY protractor.sh /
 COPY environment /etc/sudoers.d/
 COPY package.json /protractor/package.json
+ADD lib /protractor/
 RUN cd /protractor && npm install
 # Fix for the issue with Selenium, as described here:
 # https://github.com/SeleniumHQ/docker-selenium/issues/87
-ENV DBUS_SESSION_BUS_ADDRESS=/dev/null SCREEN_RES=1280x1024x24
+#ENV DBUS_SESSION_BUS_ADDRESS=/dev/null SCREEN_RES=1280x1024x24
 WORKDIR /protractor
 ENTRYPOINT ["/protractor.sh"]
