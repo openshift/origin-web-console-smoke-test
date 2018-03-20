@@ -26,17 +26,13 @@ const junitReporter = new jasmineReporters.JUnitXmlReporter({
 
 exports.config = {
   // skip webdriver manager, selenium, etc
-  directConnect: true,
-  // chromeDriver: '/usr/bin/google-chrome',
+  // directConnect: true,
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-      'args': ['headless', 'window-size=800x600']
+      'args': ['no-sandbox', 'headless']
     },
     acceptInsecureCerts : true
-    // 'moz:firefoxOptions': {
-    //   args: [ '-headless' ]
-    // }
   },
 
   specs: ['spec/**/*.spec.js'],
