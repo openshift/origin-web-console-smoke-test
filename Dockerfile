@@ -16,13 +16,11 @@ RUN npm install -g protractor@4.0.14 minimist@1.2.0 && \
     rm -rf /var/lib/apt/lists/* \
     rm ${CHROME_PACKAGE} && \
     mkdir /protractor
+
 COPY protractor.sh /
 COPY environment /etc/sudoers.d/
 COPY package.json /protractor/package.json
-ADD lib /protractor/
 RUN cd /protractor && npm install
-# Fix for the issue with Selenium, as described here:
-# https://github.com/SeleniumHQ/docker-selenium/issues/87
-#ENV DBUS_SESSION_BUS_ADDRESS=/dev/null SCREEN_RES=1280x1024x24
+
 WORKDIR /protractor
 ENTRYPOINT ["/protractor.sh"]
