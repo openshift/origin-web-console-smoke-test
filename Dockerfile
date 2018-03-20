@@ -18,7 +18,6 @@ RUN npm install -g protractor@4.0.14 minimist@1.2.0 && \
     mkdir /protractor
 
 COPY protractor.sh /
-COPY environment /etc/sudoers.d/
 COPY package.json /protractor/package.json
 RUN cd /protractor && npm install
 
