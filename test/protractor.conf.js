@@ -6,7 +6,7 @@ const { SpecReporter } = require('jasmine-spec-reporter');
 const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
 const jasmineReporters = require('jasmine-reporters');
 
-const output = '../test_reports';
+const output = './test_reports';
 
 const screenshotReporter = new HtmlScreenshotReporter({
   cleanDestination: isMac ? true : false,
