@@ -5,9 +5,10 @@ metadata:
   labels:
     app: origin-web-console-smoke-test
 spec:
+  restartPolicy: Never
   containers:
   - name: origin-web-console-smoke-test
-    image: benjaminapetersen/origin-web-console-smoke-test:v0.0.9
+    image: benjaminapetersen/origin-web-console-smoke-test:latest
     imagePullPolicy: IfNotPresent
     env:
     - name: CONSOLE_URL
