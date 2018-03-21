@@ -13,8 +13,14 @@ port=$(echo "$host_with_port" | grep : | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\)
 os::log::info "Getting certificate for ${CONSOLE_URL}"
 timeout 30 google-chrome --no-sandbox --headless --disable-gpu --dump-dom "$CONSOLE_URL" &>/dev/null
 echo 'GET /' | timeout 30 openssl s_client -showcerts -connect "$host:$port" | openssl x509 -outform PEM > /tmp/console-e2e.pem
-os::log::info "Storign obtained certificate"
+os::log::info "Storing obtained certificate"
 certutil -d "sql:$HOME/.pki/nssdb" -A -n console -t Pu,, -i /tmp/console-e2e.pem
 
 os::log::info "Launching protractor tests"
-protractor $@
+
+failed=1
+if protractor $@; then
+  failed=0
+fi
+
+exit $failed
