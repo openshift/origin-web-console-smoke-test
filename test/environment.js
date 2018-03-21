@@ -1,14 +1,19 @@
 const
-  protocol = 'https://',
-  host = '192.168.100.3',
+  protocol = 'https',
+  defaultHost = '127.0.0.1'
   serverPort = 8443,
-  // env var for public url should be complete: https://192.168.1.69:8443
-  baseUrl = process.env.CONSOLE_URL || `${protocol}${host}:${serverPort}`,
+  baseUrl = process.env.CONSOLE_URL || `${protocol}://${defaultHost}:${serverPort}`,
   consoleUrl = `${baseUrl}/console`,
   loginUrl = `${baseUrl}/login`;
 
 const USER_NAME = process.env.CONSOLE_USER || 'e2e-user';
 const USER_PASS = process.env.CONSOLE_PASSWORD || 'e2e-user';
+
+if(!process.env.CONSOLE_URL) {
+  console.log(`CONSOLE_URL is not defined, using ${baseUrl}`);
+} else {
+  console.log(`CONSOLE_URL is ${baseUrl}`);
+}
 
 module.exports = {
   baseUrl: baseUrl,

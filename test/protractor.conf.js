@@ -6,7 +6,7 @@ const { SpecReporter } = require('jasmine-spec-reporter');
 const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
 const jasmineReporters = require('jasmine-reporters');
 
-const output = './test_reports';
+const output = '../test_reports';
 
 const screenshotReporter = new HtmlScreenshotReporter({
   cleanDestination: isMac ? true : false,
@@ -20,7 +20,7 @@ const screenshotReporter = new HtmlScreenshotReporter({
 
 const junitReporter = new jasmineReporters.JUnitXmlReporter({
   consolidateAll: true,
-  savePath: `${output}/junint`,
+  savePath: `${output}/junit`,
   filePrefix: 'e2e-results'
 });
 
@@ -30,7 +30,11 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-      'args': ['no-sandbox', 'headless', 'window-size=1400,1050']
+      // TODO: non-mac users may also run this locally & want to
+      // see the browser
+      'args': isMac ?
+              [] :
+              ['no-sandbox', 'headless', 'window-size=1400,1050']
     },
     acceptInsecureCerts : true
   },
