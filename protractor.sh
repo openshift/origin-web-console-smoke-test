@@ -22,5 +22,13 @@ failed=1
 if protractor $@; then
   failed=0
 fi
+os::log::info "Uploading smoke test screenshot"
+SCREENSHOT_URL=$(curl --upload-file /protractor/test_reports/screenshots/chrome/'Openshift login page oauth flow should login and redirect to the catalog page.png' https://transfer.sh/os_smoke_tests.png)
+
+os::log::info "Uploading smoke test report"
+REPORT_URL=$(curl --upload-file /protractor/test_reports/screenshots/protractor-e2e-report.html https://transfer.sh/protractor-e2e-report.html)
+
+os::log::info "Please visit ${SCREENSHOT_URL} to see the screenshot of the test"
+os::log::info "Please visit ${REPORT_URL} to see the report of the test"
 
 exit $failed
