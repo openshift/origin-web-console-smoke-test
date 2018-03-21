@@ -1,8 +1,4 @@
-node_modules
-npm-debug.log
-.tmp
-.sass-cache
-.bundle
-.idea
-bower_components
 .DS_Store
+node_modules
+test_reports/junit/**/*
+test_reports/screenshots/**/*
