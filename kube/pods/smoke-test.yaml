@@ -4,6 +4,10 @@ metadata:
   name: origin-web-console-smoke-test-pod
   labels:
     app: origin-web-console-smoke-test
+  annotations:
+    prometheus.io/scrape: "true"
+    # todo: enable HTTPS
+    prometheus.io/scheme: http
 spec:
   restartPolicy: Never
   containers:
