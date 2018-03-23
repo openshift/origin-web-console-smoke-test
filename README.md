@@ -5,6 +5,7 @@
 This will run protractor against Chrome allowing you to see the tests:
 
 ```bash
+cd test
 yarn install
 $(yarn bin)/webdriver-manager update
 CONSOLE_URL=https://<machine-ip>:8443 $(yarn bin)/protractor protractor.conf.js
@@ -39,6 +40,30 @@ $ protractor protractor.conf.js
 
 Based on [Docker Protractor Headless](https://github.com/jciolek/docker-protractor-headless)
 
+## Deploying on openshift
+
+Create an `openshift-*` namespace for the container to run in.  You will need to do this as cluster admin as
+`openshift-*` is reserved:
+
+```bash
+oc create namespace openshift-console-smoke-test
+```
+
+Next, use `/kube/pods/smoke-test.yaml` to deploy the image within this namespace.  Be sure to update the
+`CONSOLE_URL` environment variable to point to the correct IP address:
+
+```yaml
+containers:
+- name: origin-web-console-smoke-test
+  image: jhadvig/protractor-smoke-test:latest
+  imagePullPolicy: Always
+  env:
+  # update the IP to <machine-ip>, wherever the console is running
+  - name: CONSOLE_URL
+    value: https://<machine-ip>:8443
+```
+
+
 ## Collecting metrics
 
 [Prom Client](https://github.com/siimon/prom-client) for Node.js is used to collect metrics.
@@ -60,6 +85,24 @@ is hit, via a browser or otherwise, a txt file like the following will be return
 # TYPE origin_web_console_smoke_test counter
 origin_web_console_smoke_test 2
 ```
+
+The `kube/pods/smoke-test.yaml` file has the appropriate annotations for prometheus to
+collect metrics:
+
+
+```yaml
+annotations:
+  prometheus.io/scrape: "true"
+  # todo: enable HTTPS
+  prometheus.io/scheme: http
+```
+
+However, this is still not automatic.
+
+TODO: figure out what else is needed to get prometheus to hit this endpoint.
+
+
+### TODO for metrics:
 
 This is implemented as a prometheus Counter.  It is a proof of concept only. Some things we need
 to decide:

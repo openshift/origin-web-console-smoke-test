@@ -12,12 +12,10 @@ spec:
   restartPolicy: Never
   containers:
   - name: origin-web-console-smoke-test
-    image: benjaminapetersen/origin-web-console-smoke-test:latest
-    imagePullPolicy: IfNotPresent
+    # image: jhadvig/protractor-smoke-test:latest
+    image: benjaminapetersen/origin-web-console-smoke-test:v0.0.7
+    imagePullPolicy: Always
     env:
+    # update the IP to <machine-ip>, wherever the console is running
     - name: CONSOLE_URL
-      value: https://10.192.213.145:8443
-    - name: CONSOLE_USER
-      value: bob
-    - name: CONSOLE_PASSWORD
-      value: bob
+      value: https://192.168.1.69:8443
