@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
 echo "Run the following:"
 echo "$ CONSOLE_URL=<url> protractor protractor.conf.js"
 

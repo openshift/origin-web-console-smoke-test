@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# standard openshift preamble for bash scripts, but will break things :D
+#set -o errexit
+#set -o nounset
+#set -o pipefail
+
 source "./lib/util/text.sh"
 source "./lib/log/output.sh"
 source "./lib/log/output_additions.sh"
@@ -22,6 +27,15 @@ failed=1
 if protractor $@; then
   failed=0
 fi
+
+node server.js
+metrics_endpoint_status=$?
+if [ $metrics_endpoint_status ]; then
+  echo "Failure to create /metrics endpoint"
+  exit $metrics_endpoint_status
+fi
+
+
 os::log::info "Uploading smoke test screenshot"
 SCREENSHOT_URL=$(curl --upload-file /protractor/test_reports/screenshots/chrome/'Openshift login page oauth flow should login and redirect to the catalog page.png' https://transfer.sh/os_smoke_tests.png)
 
