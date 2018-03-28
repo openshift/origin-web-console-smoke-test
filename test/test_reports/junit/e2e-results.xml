@@ -1,8 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites disabled="0" errors="0" failures="0" tests="1" time="14158">
- <testsuite name="Openshift login page" timestamp="2018-03-20T14:48:11" hostname="localhost" time="7.079" errors="0" tests="0" skipped="0" disabled="0" failures="0">
+<testsuites disabled="0" errors="0" failures="1" tests="1" time="6950">
+ <testsuite name="Openshift login page" timestamp="2018-04-06T14:10:21" hostname="localhost" time="3.475" errors="0" tests="0" skipped="0" disabled="0" failures="0">
  </testsuite>
- <testsuite name="Openshift login page.oauth flow" timestamp="2018-03-20T14:48:11" hostname="localhost" time="7.079" errors="0" tests="1" skipped="0" disabled="0" failures="0">
-  <testcase classname="Openshift login page.oauth flow" name="should login and redirect to the catalog page" time="7.077" />
+ <testsuite name="Openshift login page.bypass OAuth with service account token" timestamp="2018-04-06T14:10:21" hostname="localhost" time="3.475" errors="0" tests="1" skipped="0" disabled="0" failures="1">
+  <testcase classname="Openshift login page.bypass OAuth with service account token" name="should bypass the login flow by injecting a service account token into localStorage" time="3.472">
+   <failure type="exception" message="Failed: No element found using locator: By(css selector, h1)"><![CDATA[NoSuchElementError: No element found using locator: By(css selector, h1)
+    at elementArrayFinder.getWebElements.then (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/protractor/built/element.js:814:27)
+    at ManagedPromise.invokeCallback_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:1376:14)
+    at TaskQueue.execute_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:3084:14)
+    at TaskQueue.executeNext_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:3067:27)
+    at asyncRun (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:2927:27)
+    at /Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:668:7
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:160:7)Error
+    at ElementArrayFinder.applyAction_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/protractor/built/element.js:459:27)
+    at ElementArrayFinder.(anonymous function).args [as getText] (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/protractor/built/element.js:91:29)
+    at ElementFinder.(anonymous function).args [as getText] (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/protractor/built/element.js:831:22)
+    at UserContext.it (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/spec/login-with-service-account-token.spec.js:26:29)
+    at /Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasminewd2/index.js:112:25
+    at new ManagedPromise (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:1077:7)
+    at ControlFlow.promise (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:2505:12)
+    at schedulerExecute (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasminewd2/index.js:95:18)
+    at TaskQueue.execute_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:3084:14)
+    at TaskQueue.executeNext_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:3067:27)
+From: Task: Run it("should bypass the login flow by injecting a service account token into localStorage") in control flow
+    at UserContext.<anonymous> (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasminewd2/index.js:94:19)
+    at attempt (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4297:26)
+    at QueueRunner.run (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4217:20)
+    at runNext (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4257:20)
+    at /Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4264:13
+    at /Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4172:9
+    at /Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasminewd2/index.js:64:48
+    at ControlFlow.emit (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/events.js:62:21)
+    at ControlFlow.shutdown_ (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:2674:10)
+    at shutdownTask_.MicroTask (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/selenium-webdriver/lib/promise.js:2599:53)
+From asynchronous test: 
+Error
+    at Suite.describe (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/spec/login-with-service-account-token.spec.js:20:5)
+    at addSpecsToSuite (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1107:25)
+    at Env.describe (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1074:7)
+    at describe (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4399:18)
+    at Suite.describe (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/spec/login-with-service-account-token.spec.js:15:3)
+    at addSpecsToSuite (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1107:25)
+    at Env.describe (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1074:7)
+    at describe (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:4399:18)
+    at Object.<anonymous> (/Users/bpeterse/Dropbox/Development/github/bap-origin-web-console-smoke-test-nodejs/test/spec/login-with-service-account-token.spec.js:14:1)]]>
+   </failure>
+  </testcase>
  </testsuite>
 </testsuites>

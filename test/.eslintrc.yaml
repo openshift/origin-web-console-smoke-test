@@ -12,6 +12,8 @@ globals:
   expect: true
   it: true
   jasmine: true
+  module: true
+  window: true
 rules:
   comma-style:
     - error

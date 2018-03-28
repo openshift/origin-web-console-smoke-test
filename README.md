@@ -9,6 +9,17 @@ cd test
 yarn install
 $(yarn bin)/webdriver-manager update
 CONSOLE_URL=https://<machine-ip>:8443 $(yarn bin)/protractor protractor.conf.js
+# additionally, you can use the following environment variables
+CONSOLE_URL=https://<machine-ip>:8443 \
+  # If you are not running in a container within Openshift/Kubernetes,
+  # you will need to provide a token or run the oauth flow as the
+  # service account token will not exist.  The service account token
+  # is read from disk in these environments.
+  TOKEN=<some-token> \
+  # don't use TOKEN + CONSOLE_USER CONSOLE_PASSWORD
+  CONSOLE_USER=<some-username-for-oauth> \
+  CONSOLE_PASSWORD=<some-password-for-oauth> \
+  $(yarn bin)/protractor protractor.conf.js
 ```
 
 ## Build the container
@@ -24,7 +35,7 @@ $ docker build -t protractor-smoke-test .
 ```bash
 $ CONSOLE_URL=https://<machine-ip>:8443 ./docker_run.sh
 # or
-$ docker run -it --privileged --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<machine-ip>:8443 protractor-smoke-test
+$ docker run -it --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<machine-ip>:8443 protractor-smoke-test
 ```
 
 # Debug from within the container
@@ -34,7 +45,7 @@ $ ./docker_debug.sh
 # then, in the container:
 # $ CONSOLE_URL=https://<machine-ip>:8443 protractor protractor.conf.js
 # or
-$ docker run -it --privileged --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<machine-ip>:8443 --entrypoint /bin/bash protractor-smoke-test
+$ docker run -it --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<machine-ip>:8443 --entrypoint /bin/bash protractor-smoke-test
 $ protractor protractor.conf.js
 ```
 
