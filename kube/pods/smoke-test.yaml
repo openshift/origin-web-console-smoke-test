@@ -12,8 +12,10 @@ spec:
   restartPolicy: Never
   containers:
   - name: origin-web-console-smoke-test
-    # image: jhadvig/protractor-smoke-test:latest
     image: benjaminapetersen/origin-web-console-smoke-test:v0.0.7
+    ports:
+    - containerPort: 3000
+      protocol: TCP
     imagePullPolicy: Always
     env:
     # update the IP to <machine-ip>, wherever the console is running

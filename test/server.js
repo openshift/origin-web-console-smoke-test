@@ -60,5 +60,25 @@ server.get('/metrics', (req, res) => {
   res.end(register.metrics());
 });
 
-console.log('Server listening to 3000, metrics exposed on /metrics endpoint');
+server.get('/protractor', (req, res) => {
+  var sys = require('util');
+  var exec = require('child_process').exec;
+  var child;
+  console.log("[INFO] Running protractor tests");
+  child = exec("protractor /protractor/protractor.conf.js", function (error, stdout, stderr) {
+    // sys.print('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('[ERROR] ' + error);
+    } else {
+      res.send("[INFO] Test triggered.");
+    }
+    console.log('[INFO] ' + stdout);
+  });
+  res.end();
+});
+
+console.log('[INFO] Server listening to 3000.');
+console.log('[INFO] Exposed enpoints:');
+console.log('[INFO]  /metrics - for scraping test results');
+console.log('[INFO]  /protractor - for triggering origin-web-console smoke test');
 server.listen(3000);
