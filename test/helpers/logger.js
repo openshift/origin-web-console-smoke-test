@@ -15,11 +15,11 @@ const COLORS = {
 };
 
 [
-  {key: 'log',      prefix: 'log',      color: COLORS.reset },
-  {key: 'info',     prefix: 'info',     color: COLORS.blue },
-  {key: 'warn',     prefix: 'warn',     color: COLORS.yellow },
-  {key: 'error',    prefix: 'error',    color: COLORS.red },
-  {key: 'success',  prefix: 'success',  color: COLORS.green },
+  {key: 'log',      prefix: 'INFO',     color: COLORS.reset },
+  {key: 'info',     prefix: 'INFO',     color: COLORS.blue },
+  {key: 'warn',     prefix: 'WARN',     color: COLORS.yellow },
+  {key: 'error',    prefix: 'ERROR',    color: COLORS.red },
+  {key: 'success',  prefix: 'SUCCESS',  color: COLORS.green },
 ].forEach((logType) => {
   module.exports[logType.key] = function(...args) {
     // Logs outside of the promise wrapper, and then again below
