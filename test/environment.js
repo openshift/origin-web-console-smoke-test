@@ -1,13 +1,30 @@
+'use strict';
+
 const
   protocol = 'https',
-  defaultHost = '127.0.0.1'
+  defaultHost = '127.0.0.1',
   serverPort = 8443,
   baseUrl = process.env.CONSOLE_URL || `${protocol}://${defaultHost}:${serverPort}`,
   consoleUrl = `${baseUrl}/console`,
-  loginUrl = `${baseUrl}/login`;
+  loginUrl = `${baseUrl}/login`,
+  authRedirectUrl = `${baseUrl}/oauth/authorize?client_id=openshift-web-console&response_type=token&state=`;
 
-const USER_NAME = process.env.CONSOLE_USER || 'e2e-user';
-const USER_PASS = process.env.CONSOLE_PASSWORD || 'e2e-user';
+const SERVICE_ACCOUNT_TOKEN = (
+  // if the user passes in a token as an env var, use that
+  process.env.TOKEN ||
+  // otherwise fallback to our script to search for a
+  // service acct token, which should also be provided as
+  // an env var
+  process.env.SERVICE_ACCOUNT_TOKEN
+)
+const auth = {
+  token: SERVICE_ACCOUNT_TOKEN
+};
+
+const user = {
+  name:  process.env.CONSOLE_USER || 'e2e-user',
+  pass: process.env.CONSOLE_PASSWORD || 'e2e-user'
+};
 
 if(!process.env.CONSOLE_URL) {
   console.log(`CONSOLE_URL is not defined, using ${baseUrl}`);
@@ -16,12 +33,11 @@ if(!process.env.CONSOLE_URL) {
 }
 
 module.exports = {
-  baseUrl: baseUrl,
-  loginUrl: loginUrl,
-  consoleUrl: consoleUrl,
+  baseUrl,
+  loginUrl,
+  consoleUrl,
+  authRedirectUrl,
   isMac: /^darwin/.test(process.platform),
-  user: {
-    name: USER_NAME,
-    pass: USER_PASS
-  }
+  user,
+  auth
 };
