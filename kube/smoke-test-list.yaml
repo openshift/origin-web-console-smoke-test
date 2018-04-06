@@ -1,0 +1,65 @@
+---
+kind: List
+apiVersion: v1
+metadata: {}
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: origin-web-console-smoke-test-pod
+    labels:
+      app: origin-web-console-smoke-test
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/scheme: http
+  spec:
+    restartPolicy: Never
+    containers:
+    - name: origin-web-console-smoke-test
+      image: benjaminapetersen/origin-web-console-smoke-test:v0.0.7
+      ports:                              
+      - containerPort: 3000
+        protocol: TCP
+      imagePullPolicy: IfNotPresent
+      env:
+      - name: CONSOLE_URL
+        value: https://192.168.1.69:8443
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: origin-web-console-smoke-test-service
+  spec:
+    ports:
+    - name: web
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 0
+    selector:
+      app: origin-web-console-smoke-test
+    type: ClusterIP
+    clusterIP: 172.30.136.123
+    sessionAffinity: None
+  status:
+    loadBalancer: {}
+- apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    name: run-protractor
+  spec:
+    schedule: "*/5 * * * *"
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      spec:
+        template:
+          metadata:
+            name: run-protractor
+            labels:
+              app: origin-web-console-smoke-test
+          spec:
+            containers:
+            - name: run-protractor
+              image: byrnedo/alpine-curl
+              command: ["/bin/sh",  "-c", "curl -k 172.30.136.123:3000/protractor"]
+            restartPolicy: Never
