@@ -27,7 +27,7 @@ CONSOLE_URL=https://<machine-ip>:8443 \
 ```bash
 $ ./docker_build.sh
 # or
-$ docker build -t protractor-smoke-test .
+$ docker build -t origin-web-console-smoke-test .
 ```
 
 # Run the tests in a container
@@ -35,7 +35,7 @@ $ docker build -t protractor-smoke-test .
 ```bash
 $ CONSOLE_URL=https://<machine-ip>:8443 ./docker_run.sh
 # or
-$ docker run -it --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<machine-ip>:8443 protractor-smoke-test
+$ docker run -it --rm -e CONSOLE_URL=https://<machine-ip>:8443 origin-web-console-smoke-test
 ```
 
 # Debug from within the container
@@ -45,7 +45,7 @@ $ ./docker_debug.sh
 # then, in the container:
 # $ CONSOLE_URL=https://<machine-ip>:8443 protractor protractor.conf.js
 # or
-$ docker run -it --rm --shm-size 2g -v $(pwd)/test:/protractor -e CONSOLE_URL=https://<machine-ip>:8443 --entrypoint /bin/bash protractor-smoke-test
+$ docker run -it --rm -e CONSOLE_URL=https://<machine-ip>:8443 --entrypoint /bin/bash origin-web-console-smoke-test
 $ protractor protractor.conf.js
 ```
 
@@ -53,7 +53,7 @@ Based on [Docker Protractor Headless](https://github.com/jciolek/docker-protract
 
 ## Deploying on openshift
 
-Create an `openshift-*` namespace for the container to run in.  You will need to do this as cluster admin as
+Create an `openshift-*` namespace for the container to run in. You will need to do this as cluster admin as
 `openshift-*` is reserved:
 
 ```bash
@@ -66,7 +66,7 @@ Next, use `/kube/pods/smoke-test.yaml` to deploy the image within this namespace
 ```yaml
 containers:
 - name: origin-web-console-smoke-test
-  image: jhadvig/protractor-smoke-test:latest
+  image: benjaminapetersen/origin-web-console-smoke-test:latest
   imagePullPolicy: Always
   env:
   # update the IP to <machine-ip>, wherever the console is running
@@ -74,6 +74,9 @@ containers:
     value: https://<machine-ip>:8443
 ```
 
+## Running tests
+
+The origin smoke tests are running periodically, every 5 minutes. To override the interval length use `TEST_INTERVAL` variable.
 
 ## Collecting metrics
 

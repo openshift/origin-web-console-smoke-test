@@ -21,6 +21,9 @@ const auth = {
   token: SERVICE_ACCOUNT_TOKEN
 };
 
+// Default test interval is 5 minutes
+const test_interval = parseInt(process.env.TEST_INTERVAL) * 60000 || 300000;
+
 const user = {
   name:  process.env.CONSOLE_USER || 'e2e-user',
   pass: process.env.CONSOLE_PASSWORD || 'e2e-user'
@@ -38,6 +41,7 @@ module.exports = {
   consoleUrl,
   authRedirectUrl,
   isMac: /^darwin/.test(process.platform),
+  test_interval,
   user,
   auth
 };
