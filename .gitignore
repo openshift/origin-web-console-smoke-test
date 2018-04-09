@@ -1,4 +1,3 @@
 .DS_Store
 node_modules
-test_reports/junit/**/*
-test_reports/screenshots/**/*
+test/test_reports/**/**/*
