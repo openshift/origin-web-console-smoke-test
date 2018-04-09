@@ -21,8 +21,6 @@ echo 'GET /' | timeout 30 openssl s_client -showcerts -connect "$host:$port" | o
 os::log::info "Storing obtained certificate"
 certutil -d "sql:$HOME/.pki/nssdb" -A -n console -t Pu,, -i /tmp/console-e2e.pem
 
-os::log::info "Launching protractor tests"
-
 # protractor will need this to login...
 service_account_token=$(</var/run/secrets/kubernetes.io/serviceaccount/token)
 if [[ -z "${service_account_token// }" ]]; then
@@ -33,6 +31,8 @@ else
   os::log::info "Token ${service_account_token:0:10}***(redacted)"
 fi
 export SERVICE_ACCOUNT_TOKEN=$service_account_token
+
+os::log::info "Launching protractor tests"
 
 failed=1
 if protractor $@; then

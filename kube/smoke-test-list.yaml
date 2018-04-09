@@ -16,7 +16,7 @@ items:
     restartPolicy: Never
     containers:
     - name: origin-web-console-smoke-test
-      image: benjaminapetersen/origin-web-console-smoke-test:v0.0.7
+      image: benjaminapetersen/origin-web-console-smoke-test:latest
       ports:                              
       - containerPort: 3000
         protocol: TCP
@@ -24,7 +24,9 @@ items:
       env:
       - name: CONSOLE_URL
         value: https://192.168.1.69:8443
-- kind: Service
+      - name: TEST_INTERVAL
+        value: 2
+  kind: Service
   apiVersion: v1
   metadata:
     name: origin-web-console-smoke-test-service
@@ -42,24 +44,3 @@ items:
     sessionAffinity: None
   status:
     loadBalancer: {}
-- apiVersion: batch/v1beta1
-  kind: CronJob
-  metadata:
-    name: run-protractor
-  spec:
-    schedule: "*/5 * * * *"
-    successfulJobsHistoryLimit: 1
-    failedJobsHistoryLimit: 1
-    jobTemplate:
-      spec:
-        template:
-          metadata:
-            name: run-protractor
-            labels:
-              app: origin-web-console-smoke-test
-          spec:
-            containers:
-            - name: run-protractor
-              image: byrnedo/alpine-curl
-              command: ["/bin/sh",  "-c", "curl -k 172.30.136.123:3000/protractor"]
-            restartPolicy: Never

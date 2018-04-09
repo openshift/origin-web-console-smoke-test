@@ -12,8 +12,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: origin-web-console-smoke-test
-    # image: jhadvig/protractor-smoke-test:latest
-    image: benjaminapetersen/origin-web-console-smoke-test:v0.0.17
+    image: benjaminapetersen/origin-web-console-smoke-test:latest
     ports:
     - containerPort: 3000
       protocol: TCP
@@ -22,3 +21,5 @@ spec:
     # update the IP to <machine-ip>, wherever the console is running
     - name: CONSOLE_URL
       value: https://192.168.1.69:8443
+    - name: TEST_INTERVAL
+      value: '2'

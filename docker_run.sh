@@ -12,6 +12,5 @@ else
 fi
 
 docker run -it --rm \
-  --shm-size 2g -v $(pwd)/test:/protractor \
   -e CONSOLE_URL=${CONSOLE_URL}  \
-  protractor-smoke-test
+  origin-web-console-smoke-test

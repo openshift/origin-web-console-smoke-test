@@ -3,4 +3,4 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-docker build -t protractor-smoke-test .
+docker build -t origin-web-console-smoke-test .

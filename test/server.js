@@ -12,6 +12,9 @@ const fs = require('fs');
 const client = require('prom-client');
 const register = client.register;
 
+const exec = require('child_process').exec;
+const env = require('./environment');
+
 const testOutputPath = `${__dirname}/test_reports/junit/e2e-results.xml`;
 
 // Dunno if we need this, but its encouraged via
@@ -52,29 +55,25 @@ var fileReadInterval = setInterval(() => {
   });
 }, 1000);
 
+var smokeTestsInterval = setInterval(() => {
+  console.log(`[INFO] Running smoke tests at ${env.test_interval / 60000} minute interval`);
+  var child;
+  child = exec("protractor /protractor/protractor.conf.js", function (error, stdout, stderr) {
+    if (error !== null) {
+      console.log('[ERROR] ' + error);
+      // Not sure if we want to stop testing after an error occurs
+      // clearInterval(smokeTestsInterval);
+    }
+    console.log('[INFO] ' + stdout);
+  });
+}, env.test_interval);
+
 
 // prometheus should scrape this endpoint for data.
 server.get('/metrics', (req, res) => {
   console.log(`GET /metrics ${register.metrics()}`);
   res.set('Content-Type', register.contentType);
   res.end(register.metrics());
-});
-
-server.get('/protractor', (req, res) => {
-  var sys = require('util');
-  var exec = require('child_process').exec;
-  var child;
-  console.log("[INFO] Running protractor tests");
-  child = exec("protractor /protractor/protractor.conf.js", function (error, stdout, stderr) {
-    // sys.print('stderr: ' + stderr);
-    if (error !== null) {
-      console.log('[ERROR] ' + error);
-    } else {
-      res.send("[INFO] Test triggered.");
-    }
-    console.log('[INFO] ' + stdout);
-  });
-  res.end();
 });
 
 console.log('[INFO] Server listening to 3000.');
