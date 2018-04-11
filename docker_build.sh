@@ -3,4 +3,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-docker build -t openshift-web-console-smoke-test .
+CONTAINER_NAME=${CONTAINER_NAME:-web-console-smoke-test}
+TAG=${TAG:-latest}
+
+echo "building ${CONTAINER_NAME}:${TAG}"
+
+docker build -t "${CONTAINER_NAME}:${TAG}" "${PWD}"

@@ -1,0 +1,122 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: web-console-smoke-test-template
+  annotations:
+    openshift.io/display-name: Web Console Smoke Test
+    iconClass: icon-openshift
+    tags: openshift,infra
+    # TODO: update this URL when we migrate up the repo
+    openshift.io/documentation-url: https://github.com/benjaminapetersen/origin-web-console-smoke-test
+    openshift.io/support-url: https://access.redhat.com
+    openshift.io/provider-display-name: Red Hat, Inc.
+    description: >
+      Runs smoke tests in a headless browser against the web console at a provided URL.
+
+      For more information about using this template, see
+      https://github.com/benjaminapetersen/origin-web-console-smoke-test/blob/master/README.md
+objects:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: web-console-smoke-test
+    namespace: ${NAMESPACE}
+    labels:
+      app: web-console-smoke-test
+  spec:
+    # replica set
+    replicas: ${REPLICA_COUNT}
+    # selector = how the deployment finds pods to manage
+    selector:
+      matchLabels:
+        app: web-console-smoke-test
+    template:
+      metadata:
+        labels:
+          app: web-console-smoke-test
+      spec:
+        containers:
+        - name: web-console-smoke-test
+          image: ${IMAGE}
+          imagePullPolicy: ${PULL_POLICY}
+          env:
+          - name: TOKEN
+            value: ${TOKEN}
+          - name: CONSOLE_URL
+            value: ${CONSOLE_URL}
+          - name: CONSOLE_USER
+            value: ${CONSOLE_USER}
+          - name: CONSOLE_PASSWORD
+            value: ${CONSOLE_PASSWORD}
+          - name: TEST_INTERVAL_MINUTES
+            value: ${TEST_INTERVAL_MINUTES}
+          ports:
+          - containerPort: 3000
+          restartPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/tls-certs
+              name: web-console-smoke-test-serving-cert
+              readOnly: true
+        volumes:
+        - name: web-console-smoke-test-serving-cert
+          secret:
+            defaultMode: 400
+            secretName: web-console-smoke-test-serving-cert
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: web-console-smoke-test
+    namespace: ${NAMESPACE}
+    annotations:
+      service.alpha.openshift.io/serving-cert-secret-name: web-console-smoke-test-serving-cert
+        # TODO:
+        # don't we need these annotations, just like the web-console?
+        # https://github.com/openshift/origin/blob/master/install/origin-web-console/console-template.yaml#L127
+        # prometheus.io/scrape: "true"
+        # prometheus.io/scheme: https
+  spec:
+    ports:
+    - name: web
+      protocol: TCP
+      port: 443
+      targetPort: 3000
+      nodePort: 0
+    selector:
+      app: web-console-smoke-test
+    type: ClusterIP
+    sessionAffinity: None
+  status:
+    loadBalancer: {}
+parameters:
+- name: IMAGE
+# TODO: update this URL when we migrate up the repo
+  value: benjaminapetersen/origin-web-console-smoke-test:latest
+- name: NAMESPACE
+  # This namespace cannot be changed. Only `openshift-web-console-smoke-test` is supported.
+  value: openshift-web-console-smoke-test
+- name: REPLICA_COUNT
+  value: "1"
+- name: PULL_POLICY
+  value: IfNotPresent
+- name: CONSOLE_URL
+  description: The location of the web console, in the format of https://<machine-ip>:8443
+  # TODO: can we default this? probably not.
+  required: true
+- name: CONSOLE_USER
+  description: An optional username
+- name: CONSOLE_PASSWORD
+  description: An optional password
+- name: TOKEN
+  description: >
+    A token to override the default flow.
+
+    If used, this should be an OAuth token provided as a string,
+    for the purpose of bypassing the oauth login flow and/or not use a
+    token from a service account.
+
+    Note that the default way to run this smoke test should be to let the
+    tests use a service account token provided by the Service annotation.
+- name: TEST_INTERVAL_MINUTES
+  description: An optional time interval to run tests, defaults to 2

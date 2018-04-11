@@ -43,7 +43,10 @@ exports.config = {
   // TODO: update docs to show flag --spec='spec/to/run.spec.js'
   // as we may want to use different flows in different environments.
   // specs: ['spec/login-with-oauth-flow.spec.js'],
+  // protractor --specs 'test/foo.spec.js'
   specs: ['spec/login-with-service-account-token.spec.js'],
+  // protractor  --suite 'suite-name'
+  // suite: {}
   logLevel: 'DEBUG', // 'ERROR'|'WARN'|'INFO'|'DEBUG'
   framework: 'jasmine',
   jasmineNodeOpts: {
@@ -73,14 +76,14 @@ exports.config = {
     browser.ignoreSynchronization = true;
 
     // nope, not in node.js land anymore...
-    // console.log('look for data....');
+    // logger.sync.log('look for data....');
     // return new Promise(function(resolve, reject) {
     //   fs.readFile(secretPath, (err, data) => {
     //     if(data) {
-    //       console.log('data?', data);
+    //       logger.sync.log('data?', data);
     //       resolve();
     //     } else {
-    //       console.log('no data', err);
+    //       logger.sync.log('no data', err);
     //       reject();
     //     }
     //   });

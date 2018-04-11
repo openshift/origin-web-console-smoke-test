@@ -29,6 +29,7 @@ const withOauthForm = (name = env.user.name, pass = env.user.pass) => {
 
 
 const withTokenInjectedIntoLocalStorage = (token, username) => {
+  // username is likely arbitrary, but may come in from env vars
   username = username || process.env.CONSOLE_USER || 'e2e-user';
   const date = new Date(),
         year = date.getFullYear(),
@@ -109,7 +110,7 @@ const viaRedirectWithEncodedState = (token) => {
   logger.log('doLogin.viaRedirectWithEncodedState()', simulatedRedirectUrl);
   browser.get(simulatedRedirectUrl);
   const catalogPage = new CatalogPage();
-  console.log('catalog url:', catalogPage.getUrl());
+  logger.log('catalog url:', catalogPage.getUrl());
   browser.sleep(5000);
 };
 

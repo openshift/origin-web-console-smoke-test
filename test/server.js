@@ -2,7 +2,7 @@
 
 // using express & prom-client
 // https://github.com/siimon/prom-client
-
+const https = require('https');
 const express = require('express');
 const server = express();
 
@@ -14,8 +14,16 @@ const register = client.register;
 
 const exec = require('child_process').exec;
 const env = require('./environment');
+const logger = require('./helpers/logger');
 
 const testOutputPath = `${__dirname}/test_reports/junit/e2e-results.xml`;
+
+// 80/443 standard http/https
+// do we need to allow this to be configured?
+// need to ensure the var names are not confusing,
+// this is not the port for the console, this is for
+// the /metrics endpoint
+const METRICS_SERVER_PORT = 3000;
 
 // Dunno if we need this, but its encouraged via
 // the docs to get the defaults...
@@ -37,7 +45,7 @@ const process = (data) => {
       counter.inc();
     }
   });
-}
+};
 
 // polling for successful test_report output
 // from the protractor tests.
@@ -56,26 +64,46 @@ var fileReadInterval = setInterval(() => {
 }, 1000);
 
 var smokeTestsInterval = setInterval(() => {
-  console.log(`[INFO] Running smoke tests at ${env.test_interval / 60000} minute interval`);
+  logger.sync.log(`Running smoke tests at ${env.test_interval / 60000} minute interval`);
   var child;
   child = exec("protractor /protractor/protractor.conf.js", function (error, stdout, stderr) {
     if (error !== null) {
-      console.log('[ERROR] ' + error);
+      logger.sync.error(error);
       // Not sure if we want to stop testing after an error occurs
       // clearInterval(smokeTestsInterval);
     }
-    console.log('[INFO] ' + stdout);
+    logger.sync.log(stdout);
   });
 }, env.test_interval);
 
 
+var pollForCert = setTimeout(() => {
+  if(!fs.existsSync(env.tls.keyPath)) {
+    logger.sync.log(`Waiting for key path: ${env.tls.keyPath}`);
+    logger.sync.log(`Waiting for cert path: ${env.tls.keyPath}`);
+    return;
+  }
+  clearInterval(pollForCert);
+  logger.sync.log('Key & Cert found, create server.');
+  // server is given to https as a callback after it sets up https
+  https
+    .createServer({
+      key: fs.readFileSync(env.tls.keyPath),
+      cert: fs.readFileSync(env.tls.crtPath),
+      // passphrase: 'ninnies'
+    }, server)
+    .listen(METRICS_SERVER_PORT, () => {
+      logger.sync.log(`https listening on ${METRICS_SERVER_PORT}`);
+    });
+}, 3 * 1000);
+
+
 // prometheus should scrape this endpoint for data.
 server.get('/metrics', (req, res) => {
-  console.log(`GET /metrics ${register.metrics()}`);
+  logger.sync.log(`GET /metrics ${register.metrics()}`);
   res.set('Content-Type', register.contentType);
   res.end(register.metrics());
 });
 
-console.log('[INFO] Server listening to 3000.');
-console.log('[INFO] Exposing /metrics enpoints for scraping test results');
-server.listen(3000);
+logger.sync.log(`[INFO] Server listening to ${METRICS_SERVER_PORT}.`);
+logger.sync.log('[INFO] Exposing /metrics enpoints for scraping test results');
