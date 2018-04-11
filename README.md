@@ -27,7 +27,7 @@ CONSOLE_URL=https://<machine-ip>:8443 \
 ```bash
 $ ./docker_build.sh
 # or
-$ docker build -t origin-web-console-smoke-test .
+$ docker build -t openshift-web-console-smoke-test .
 ```
 
 # Run the tests in a container
@@ -35,7 +35,7 @@ $ docker build -t origin-web-console-smoke-test .
 ```bash
 $ CONSOLE_URL=https://<machine-ip>:8443 ./docker_run.sh
 # or
-$ docker run -it --rm -e CONSOLE_URL=https://<machine-ip>:8443 origin-web-console-smoke-test
+$ docker run -it --rm -e CONSOLE_URL=https://<machine-ip>:8443 openshift-web-console-smoke-test
 ```
 
 # Debug from within the container
@@ -45,7 +45,7 @@ $ ./docker_debug.sh
 # then, in the container:
 # $ CONSOLE_URL=https://<machine-ip>:8443 protractor protractor.conf.js
 # or
-$ docker run -it --rm -e CONSOLE_URL=https://<machine-ip>:8443 --entrypoint /bin/bash origin-web-console-smoke-test
+$ docker run -it --rm -e CONSOLE_URL=https://<machine-ip>:8443 --entrypoint /bin/bash openshift-web-console-smoke-test
 $ protractor protractor.conf.js
 ```
 
@@ -65,8 +65,8 @@ Next, use `/kube/pods/smoke-test.yaml` to deploy the image within this namespace
 
 ```yaml
 containers:
-- name: origin-web-console-smoke-test
-  image: benjaminapetersen/origin-web-console-smoke-test:latest
+- name: openshift-web-console-smoke-test
+  image: benjaminapetersen/openshift-web-console-smoke-test:latest
   imagePullPolicy: Always
   env:
   # update the IP to <machine-ip>, wherever the console is running
@@ -76,7 +76,7 @@ containers:
 
 ## Running tests
 
-The origin smoke tests are running periodically, every 5 minutes. To override the interval length use `TEST_INTERVAL` variable.
+The origin smoke tests are running periodically, every 5 minutes. To override the interval length set `TEST_INTERVAL_MINUTES` environment variable to desired number of minutes.
 
 ## Collecting metrics
 

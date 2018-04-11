@@ -22,7 +22,7 @@ const auth = {
 };
 
 // Default test interval is 5 minutes
-const test_interval = parseInt(process.env.TEST_INTERVAL) * 60000 || 300000;
+const test_interval = parseInt(process.env.TEST_INTERVAL_MINUTES) * 60000 || 300000;
 
 const user = {
   name:  process.env.CONSOLE_USER || 'e2e-user',

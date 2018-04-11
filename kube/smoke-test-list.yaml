@@ -3,44 +3,48 @@ kind: List
 apiVersion: v1
 metadata: {}
 items:
-- apiVersion: v1
-  kind: Pod
+- kind: Deployment
+  apiVersion: apps/v1
   metadata:
-    name: origin-web-console-smoke-test-pod
+    name: openshift-web-console-smoke-test-deployment
     labels:
-      app: origin-web-console-smoke-test
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/scheme: http
+      app: openshift-web-console-smoke-test
   spec:
-    restartPolicy: Never
-    containers:
-    - name: origin-web-console-smoke-test
-      image: benjaminapetersen/origin-web-console-smoke-test:latest
-      ports:                              
-      - containerPort: 3000
-        protocol: TCP
-      imagePullPolicy: IfNotPresent
-      env:
-      - name: CONSOLE_URL
-        value: https://192.168.1.69:8443
-      - name: TEST_INTERVAL
-        value: 2
-  kind: Service
+    replicas: 1
+    selector:
+      matchLabels:
+        app: openshift-web-console-smoke-test
+    template:
+      metadata:
+        labels:
+          app: openshift-web-console-smoke-test
+      spec:
+        containers:
+        - name: openshift-web-console-smoke-test
+          image: benjaminapetersen/openshift-web-console-smoke-test:latest
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: CONSOLE_URL
+            value: https://192.168.1.69:8443
+          - name: TEST_INTERVAL_MINUTES
+            value: '2'
+          ports:
+          - containerPort: 3000
+          restartPolicy: Always
+- kind: Service
   apiVersion: v1
   metadata:
-    name: origin-web-console-smoke-test-service
+    name: openshift-web-console-smoke-test-service
   spec:
     ports:
     - name: web
       protocol: TCP
-      port: 3000
+      port: 443
       targetPort: 3000
       nodePort: 0
     selector:
-      app: origin-web-console-smoke-test
+      app: openshift-web-console-smoke-test
     type: ClusterIP
-    clusterIP: 172.30.136.123
     sessionAffinity: None
   status:
     loadBalancer: {}
