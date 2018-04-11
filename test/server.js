@@ -77,7 +77,5 @@ server.get('/metrics', (req, res) => {
 });
 
 console.log('[INFO] Server listening to 3000.');
-console.log('[INFO] Exposed enpoints:');
-console.log('[INFO]  /metrics - for scraping test results');
-console.log('[INFO]  /protractor - for triggering origin-web-console smoke test');
+console.log('[INFO] Exposing /metrics enpoints for scraping test results');
 server.listen(3000);

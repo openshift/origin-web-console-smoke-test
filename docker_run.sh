@@ -13,4 +13,4 @@ fi
 
 docker run -it --rm \
   -e CONSOLE_URL=${CONSOLE_URL}  \
-  origin-web-console-smoke-test
+  openshift-web-console-smoke-test

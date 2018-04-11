@@ -9,4 +9,4 @@ echo "$ CONSOLE_URL=<url> protractor protractor.conf.js"
 
 docker run -it --rm \
   -e CONSOLE_URL=${CONSOLE_URL} \
-  --entrypoint /bin/bash origin-web-console-smoke-test
+  --entrypoint /bin/bash openshift-web-console-smoke-test
