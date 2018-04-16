@@ -45,6 +45,8 @@ objects:
             value: ${CONSOLE_URL}
           - name: TEST_INTERVAL_MINUTES
             value: ${TEST_INTERVAL_MINUTES}
+          - name: SELF_SIGN_CERT
+            value: ${SELF_SIGN_CERT}
           ports:
           - containerPort: 3000
           restartPolicy: Always
@@ -95,3 +97,6 @@ parameters:
   required: true
 - name: TEST_INTERVAL_MINUTES
   description: An optional time interval to run tests, defaults to 2
+- name: SELF_SIGN_CERT
+  description: Indicator to obtain self-signed certificate from web-console upon testing. Defaults to true so the self-signed cert is obrained.
+  value: true
