@@ -14,7 +14,9 @@ const waitFor = function(expected) {
 };
 
 const goTo = function(uri) {
-  return browser.get(uri).then(() =>  waitFor(uri));
+  return browser.get(uri).then(() =>  waitFor(uri)).catch(() => {
+    logger.error(`Failed to navigate to ${browser.getCurrentUrl()}`);
+  });
 };
 
 class Page {
