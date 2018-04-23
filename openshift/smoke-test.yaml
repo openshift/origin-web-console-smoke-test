@@ -71,11 +71,8 @@ objects:
     namespace: ${NAMESPACE}
     annotations:
       service.alpha.openshift.io/serving-cert-secret-name: web-console-smoke-test-serving-cert
-        # TODO:
-        # don't we need these annotations, just like the web-console?
-        # https://github.com/openshift/origin/blob/master/install/origin-web-console/console-template.yaml#L127
-        # prometheus.io/scrape: "true"
-        # prometheus.io/scheme: https
+      prometheus.io/scrape: "true"
+      prometheus.io/scheme: https
   spec:
     ports:
     - name: web
