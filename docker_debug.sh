@@ -4,9 +4,22 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo "Run the following:"
-echo "$ CONSOLE_URL=<url> protractor protractor.conf.js"
+CONTAINER_NAME=${CONTAINER_NAME:-web-console-smoke-test}
+TAG=${TAG:-latest}
+
+echo ""
+echo "debug ${CONTAINER_NAME}:${TAG}"
+echo ""
+echo "-------------------------------------------------"
+# once you enter the container, you will run the following
+# commands to manually debug the test:
+echo "To manually debug, run one of the following:"
+echo "- To use the oauth flow:"
+echo "  $ CONSOLE_URL=<url> protractor protractor.conf.js"
+echo "- To use an oauth token and bypass the oauth flow:"
+echo "  $ CONSOLE_URL=<url> TOKEN=<your-token> protractor protractor.conf.js"
+echo "-------------------------------------------------"
+echo ""
 
 docker run -it --rm \
-  -e CONSOLE_URL=${CONSOLE_URL} \
-  --entrypoint /bin/bash openshift-web-console-smoke-test
+  --entrypoint /bin/bash "${CONTAINER_NAME}:${TAG}"

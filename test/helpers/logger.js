@@ -1,11 +1,27 @@
 'use strict';
 
-// Use logger functions in place of console to ensure that log messages are wrapped
-// in a promise & resolved asyncronously.
-// NOTE: even if you don't use .then(), the promise queue is still synchronized.
-// This is handy, a bit weird.
+// logger should be used in place of console.log()
+// - logger provides [INFO] and other prefixes to the type of log consistently
+// - logger by default is async, meaning it will be collected into
+//   protractors promise queue & print logs at appropriate times.
+// - logger can also be used syncronously, like console.log() if
+//   that is needed, while still keeping the [INFO] and other prefixes,
+//   as well as colors.
+//
+// Why the async hassle?
+// This helper is made primarily to be used within protractor tests, which means
+// logging must be asyncronous to have meaning.  Therefore, you must call
+// logger.sync[key]('') to get an equivalent console.log, as it is the least
+// frequent use case.
+//
+// example:
+//   These would be logged asyncronously in protractors promise resolution flow:
+//     logger.log(`Something eventually ${someVar}`);        // [INFO] Something eventually <...>
+//     logger.async.log(`Something eventually ${someVar}`);  // [INFO] Something eventually <...>
+//   This would be logged syncronously (immediately)
+//     logger.sync.log(`Something now ${someVar}`);          // [INFO] Something now <...>
 const COLORS = {
-  // all foreground colors
+  // Currently these are just forground (text) colors:
   // https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
   reset:  '\x1b[0m',
   red:    '\x1b[31m',
@@ -21,22 +37,20 @@ const COLORS = {
   {key: 'error',    prefix: 'ERROR',    color: COLORS.red },
   {key: 'success',  prefix: 'SUCCESS',  color: COLORS.green },
 ].forEach((logType) => {
-  module.exports[logType.key] = function(...args) {
-    // Logs outside of the promise wrapper, and then again below
-    // with the promise wrapped log.  This helps with some quirky
-    // debugging.  Perhaps should be a specific log level or
-    // different flag
-    if(+process.env.LOG_LEVEL > 0) {
-      console[logType.key].apply(console, [
-        logType.color,
-        `\\${logType.prefix}/ (syncronous)`,
-        ...args,
-        COLORS.reset
-      ]);
-    }
-    // http://webdriver.io/api/utility/call.html
+  let logger = console[logType.key] || console.log;
+
+  var syncLoggingFunction = function(...args) {
+    logger.apply(console, [
+      logType.color,
+      `[${logType.prefix}]`,
+      ...args,
+      COLORS.reset
+    ]);
+  };
+
+  var asyncLoggingFunction = function(...args) {
     browser.call(() => {
-      console[logType.key].apply(console, [
+      logger.apply(console, [
         logType.color,
         `[${logType.prefix}]`,
         ...args,
@@ -44,12 +58,21 @@ const COLORS = {
       ]);
     });
   };
+
+  module.exports.async = module.exports.async || {};
+  module.exports.sync = module.exports.sync || {};
+
+  module.exports[logType.key] = asyncLoggingFunction;
+  module.exports.async[logType.key] = asyncLoggingFunction;
+  module.exports.sync[logType.key] = syncLoggingFunction;
+
 });
 
-//
+// This attempts to set the logLevel in the browser, in case
+// debugging with a browser.pause() is needed.
 module.exports.setLogLevel = (level = 'INFO') => {
   return browser.executeScript(function(level) {
     localStorage["OpenShiftLogLevel.main"] = level;
     localStorage["OpenShiftLogLevel.auth"] = level;
   }, level);
-}
+};

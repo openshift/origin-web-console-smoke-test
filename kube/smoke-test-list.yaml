@@ -6,22 +6,22 @@ items:
 - kind: Deployment
   apiVersion: apps/v1
   metadata:
-    name: openshift-web-console-smoke-test-deployment
+    name: web-console-smoke-test-deployment
     labels:
-      app: openshift-web-console-smoke-test
+      app: web-console-smoke-test
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: openshift-web-console-smoke-test
+        app: web-console-smoke-test
     template:
       metadata:
         labels:
-          app: openshift-web-console-smoke-test
+          app: web-console-smoke-test
       spec:
         containers:
-        - name: openshift-web-console-smoke-test
-          image: benjaminapetersen/openshift-web-console-smoke-test:latest
+        - name: web-console-smoke-test
+          image: benjaminapetersen/web-console-smoke-test:latest
           imagePullPolicy: IfNotPresent
           env:
           - name: CONSOLE_URL
@@ -34,7 +34,9 @@ items:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: openshift-web-console-smoke-test-service
+    name: web-console-smoke-test-service
+    annotations:
+      service.alpha.openshift.io/serving-cert-secret-name: web-console-smoke-test-serving-cert
   spec:
     ports:
     - name: web
@@ -43,7 +45,7 @@ items:
       targetPort: 3000
       nodePort: 0
     selector:
-      app: openshift-web-console-smoke-test
+      app: web-console-smoke-test
     type: ClusterIP
     sessionAffinity: None
   status:
