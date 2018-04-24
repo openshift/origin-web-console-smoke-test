@@ -32,17 +32,21 @@ const collectDefaultMetrics = client.collectDefaultMetrics;
 collectDefaultMetrics({ timeout: 5000 });
 
 //
-const counter = new client.Counter({
-  name: 'origin_web_console_smoke_test',
-  help: 'The number of times the web console smoke tests pass (should be 1)'
+const successCounter = new client.Counter({
+  name: 'web_console_smoke_test_success',
+  help: 'The number of times the web console smoke tests pass'
+});
+const failCounter = new client.Counter({
+  name: 'web_console_smoke_test_fail',
+  help: 'The number of times the web console smoke tests fail'
 });
 
 const process = (data) => {
   data.testsuites.testsuite.forEach((suite) => {
-    // currently we test login
     if(suite.$.failures === '0') {
-      // we will increment the counter, yay a pass
-      counter.inc();
+      successCounter.inc();
+    } else {
+      failCounter.inc();
     }
   });
 };
