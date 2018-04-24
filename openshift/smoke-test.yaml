@@ -73,7 +73,6 @@ objects:
       protocol: TCP
       port: 443
       targetPort: 3000
-      nodePort: 0
     selector:
       app: web-console-smoke-test
     type: ClusterIP
