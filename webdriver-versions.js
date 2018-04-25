@@ -2,7 +2,7 @@
 
 const minimist = require('minimist');
 const fs = require('fs');
-const configFile = '/usr/local/lib/node_modules/protractor/node_modules/webdriver-manager/built/config.json';
+const configFile = '/usr/lib/node_modules/protractor/node_modules/webdriver-manager/built/config.json';
 const argv = minimist(process.argv.slice(2));
 
 let config = require(configFile);
