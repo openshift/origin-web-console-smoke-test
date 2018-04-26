@@ -26,7 +26,7 @@ objects:
       app: web-console-smoke-test
   spec:
     # replica set
-    replicas: ${REPLICA_COUNT}
+    replicas: 1
     # selector = how the deployment finds pods to manage
     selector:
       matchLabels:
@@ -39,7 +39,7 @@ objects:
         containers:
         - name: web-console-smoke-test
           image: ${IMAGE}
-          imagePullPolicy: ${PULL_POLICY}
+          imagePullPolicy: IfNotPresent
           env:
           - name: CONSOLE_URL
             value: ${CONSOLE_URL}
@@ -86,10 +86,6 @@ parameters:
 - name: NAMESPACE
   # This namespace cannot be changed. Only `openshift-web-console-smoke-test` is supported.
   value: openshift-web-console-smoke-test
-- name: REPLICA_COUNT
-  value: "1"
-- name: PULL_POLICY
-  value: IfNotPresent
 - name: CONSOLE_URL
   description: The location of the web console, in the format of https://<console-public-url>:8443
   required: true
