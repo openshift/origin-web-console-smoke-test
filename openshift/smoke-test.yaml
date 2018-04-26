@@ -41,14 +41,8 @@ objects:
           image: ${IMAGE}
           imagePullPolicy: ${PULL_POLICY}
           env:
-          - name: TOKEN
-            value: ${TOKEN}
           - name: CONSOLE_URL
             value: ${CONSOLE_URL}
-          - name: CONSOLE_USER
-            value: ${CONSOLE_USER}
-          - name: CONSOLE_PASSWORD
-            value: ${CONSOLE_PASSWORD}
           - name: TEST_INTERVAL_MINUTES
             value: ${TEST_INTERVAL_MINUTES}
           ports:
@@ -79,7 +73,6 @@ objects:
       protocol: TCP
       port: 443
       targetPort: 3000
-      nodePort: 0
     selector:
       app: web-console-smoke-test
     type: ClusterIP
@@ -98,22 +91,7 @@ parameters:
 - name: PULL_POLICY
   value: IfNotPresent
 - name: CONSOLE_URL
-  description: The location of the web console, in the format of https://<machine-ip>:8443
-  # TODO: can we default this? probably not.
+  description: The location of the web console, in the format of https://<console-public-url>:8443
   required: true
-- name: CONSOLE_USER
-  description: An optional username
-- name: CONSOLE_PASSWORD
-  description: An optional password
-- name: TOKEN
-  description: >
-    A token to override the default flow.
-
-    If used, this should be an OAuth token provided as a string,
-    for the purpose of bypassing the oauth login flow and/or not use a
-    token from a service account.
-
-    Note that the default way to run this smoke test should be to let the
-    tests use a service account token provided by the Service annotation.
 - name: TEST_INTERVAL_MINUTES
   description: An optional time interval to run tests, defaults to 2
