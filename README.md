@@ -23,9 +23,20 @@ oc process \
   CONSOLE_URL=<url-or-ip-for-console> | oc create -f -
 ```
 
+A service account token must be mounted into the container in order for the tests to
+run successfully:
+
+`/var/run/secrets/kubernetes.io/serviceaccount/token`
+
+This token should exist automatically if you used the provided template.  The
+annotation `web-console-smoke-test-serving-cert` on the Service will create a
+token via a Secret, and the Deployment definition will mount the Secret as
+a Volume.
+
 ## Running tests
 
-The origin smoke tests are running periodically, every 5 minutes. To override the interval length set `TEST_INTERVAL_MINUTES` environment variable to desired number of minutes.
+The origin smoke tests are running periodically, every 5 minutes. To override the interval length set
+`TEST_INTERVAL_MINUTES` environment variable to desired number of minutes.
 
 ## Collecting metrics
 
@@ -227,9 +238,3 @@ docker exec -it <container-id> /bin/bash
 # should return metrics information
 curl --insecure https://localhost:3000/metrics
 ```
-
-
-
-
-
-  
