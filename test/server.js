@@ -45,6 +45,7 @@ const process = (data) => {
   data.testsuites.testsuite.forEach((suite) => {
     if(suite.$.failures === '0') {
       successCounter.inc();
+      failCounter.reset();
     } else {
       failCounter.inc();
     }

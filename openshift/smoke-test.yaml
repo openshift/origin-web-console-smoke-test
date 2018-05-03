@@ -92,7 +92,7 @@ parameters:
   description: The location of the web console, in the format of https://<console-public-url>:8443
   required: true
 - name: TEST_INTERVAL_MINUTES
-  description: An optional time interval to run tests, defaults to 2
+  description: An optional time interval to run tests, defaults to 5
 - name: SELF_SIGN_CERT
   description: Indicator to obtain self-signed certificate from web-console upon testing. Defaults to true so the self-signed cert is obrained.
   value: "true"
