@@ -7,15 +7,14 @@ metadata:
     openshift.io/display-name: Web Console Smoke Test
     iconClass: icon-openshift
     tags: openshift,infra
-    # TODO: update this URL when we migrate up the repo
-    openshift.io/documentation-url: https://github.com/benjaminapetersen/origin-web-console-smoke-test
+    openshift.io/documentation-url: https://github.com/openshift/origin-web-console-smoke-test
     openshift.io/support-url: https://access.redhat.com
     openshift.io/provider-display-name: Red Hat, Inc.
     description: >
       Runs smoke tests in a headless browser against the web console at a provided URL.
 
       For more information about using this template, see
-      https://github.com/benjaminapetersen/origin-web-console-smoke-test/blob/master/README.md
+      https://github.com/openshift/origin-web-console-smoke-test/blob/master/README.md
 objects:
 - apiVersion: apps/v1
   kind: Deployment
@@ -25,9 +24,7 @@ objects:
     labels:
       app: web-console-smoke-test
   spec:
-    # replica set
     replicas: 1
-    # selector = how the deployment finds pods to manage
     selector:
       matchLabels:
         app: web-console-smoke-test
@@ -48,17 +45,42 @@ objects:
           - name: SELF_SIGN_CERT
             value: ${SELF_SIGN_CERT}
           ports:
-          - containerPort: 3000
+          - name: smoke-test-port
+            containerPort: 3000
           restartPolicy: Always
           volumeMounts:
             - mountPath: /etc/tls-certs
               name: web-console-smoke-test-serving-cert
               readOnly: true
+        - name: kube-rbac-proxy
+          image: quay.io/coreos/kube-rbac-proxy:v0.3.0
+          args:
+          - "--secure-listen-address=:3001"
+          - "--upstream=http://127.0.0.1:3000/"
+          - "--tls-cert-file=/etc/tls/private/tls.crt"
+          - "--tls-private-key-file=/etc/tls/private/tls.key"
+          ports:
+          - name: https
+            containerPort: 3001
+            protocol: TCP
+          resources:
+            requests:
+              memory: 20Mi
+              cpu: 10m
+            limits:
+              memory: 40Mi
+              cpu: 20m
+          volumeMounts:
+          - mountPath: /etc/tls/private
+            name: tls
         volumes:
         - name: web-console-smoke-test-serving-cert
           secret:
             defaultMode: 400
             secretName: web-console-smoke-test-serving-cert
+        - name: tls
+          secret:
+            secretName: monitor-app-create-tls
 
 - apiVersion: v1
   kind: Service
@@ -67,27 +89,21 @@ objects:
     namespace: ${NAMESPACE}
     annotations:
       service.alpha.openshift.io/serving-cert-secret-name: web-console-smoke-test-serving-cert
-      prometheus.io/scrape: "true"
-      prometheus.io/scheme: https
   spec:
     ports:
     - name: web
       protocol: TCP
       port: 443
-      targetPort: 3000
+      targetPort: https
     selector:
       app: web-console-smoke-test
     type: ClusterIP
     sessionAffinity: None
-  status:
-    loadBalancer: {}
 parameters:
 - name: IMAGE
-# TODO: update this URL when we migrate up the repo
-  value: benjaminapetersen/origin-web-console-smoke-test:latest
+  required: true
 - name: NAMESPACE
-  # This namespace cannot be changed. Only `openshift-web-console-smoke-test` is supported.
-  value: openshift-web-console-smoke-test
+  value: openshift-monitor-availability
 - name: CONSOLE_URL
   description: The location of the web console, in the format of https://<console-public-url>:8443
   required: true
